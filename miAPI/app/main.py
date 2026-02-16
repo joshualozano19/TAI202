@@ -1,9 +1,21 @@
 #Importaciones
 from fastapi import FastAPI
 import asyncio
+from typing import Optional
 
 #Instancia del servidor
-app = FastAPI()
+app = FastAPI(
+    title="Mi primer API",
+    description="Tania Asunción Cruz Márquez",
+    version="1.0"
+)
+
+#TB ficticia
+usuarios = [
+    {"id":1, "nombre":"Tania", "edad":22},
+    {"id":2, "nombre":"David", "edad":19},
+    {"id":3, "nombre":"Mario", "edad":23},
+]
 
 #Endspoints
 @app.get("/")
@@ -17,3 +29,18 @@ async def bienvenido():
             "estatus":"200",
             }
 
+@app.get("/v1/parametro0b/{id}", tags=['Parametros Obligatorios'])
+async def consultauno(id:int):
+    return{ "mensaje": "usuario encontrado",
+            "usuario": id,
+            "status": "200"}
+    
+@app.get("/v1/parametro0p/", tags=['Parametros Opcionales'])
+async def consultados(id: Optional[int] = None):
+    if id is not None:
+        for usuarioK in usuarios:
+            if usuarioK["id"] == id:
+                return {"mensaje": "usuario encontrado", "usuario": usuarioK,}
+            return {"mensaje": "usuario no encontrado", "satus": "200"}
+    else:
+        return {"mensaje": "No se propcionó un id", "status": "200"}
