@@ -56,7 +56,7 @@ async def agregar_usuario(usuario: dict):
     return {
         "mensaje": "Usuario creado",  
         "datos nuevos": usuario,
-        "status": "201"
+        "status": "200"
     }
 
 @app.put("/v1/usuarios/{id}", tags=['HTTP CRUD'])
