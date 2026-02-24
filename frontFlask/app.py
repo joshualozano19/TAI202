@@ -1,17 +1,35 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request, redirect
+import requests 
 
 app = Flask(__name__)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # Obtener datos por el atributo 'name' del input en el HTML
-        usuario = request.form.get('username')
-        password = request.form.get('password')
-        return f"Usuario: {usuario} logueado."
-    
-    return '''<form method="post">
-                <input type="text" name="username">
-                <input type="password" name="password">
-                <input type="submit" value="Enviar">
-              </form>'''
+API = "http://127.0.0.1:5000/v1/usuarios/"
+
+# Pagina principal
+@app.route("/")
+def index():
+    response = requests.get(API)
+    data = response.json()
+    usuarios = data.get("usuarios", [])  
+    return render_template("index.html", usuarios=usuarios)
+
+# Crear usuario
+@app.route("/crear", methods=["POST"])
+def crear_usuario():
+    nuevo_usuario = {
+        "id": int(request.form["id"]),
+        "nombre": request.form["nombre"],
+        "edad": int(request.form["edad"])
+    }
+
+    requests.post(API, json=nuevo_usuario)  
+    return redirect("/")
+
+# Eliminar usuario
+@app.route("/eliminar/<int:id>")
+def eliminar_usuario(id):
+    requests.delete(API + str(id)) 
+    return redirect("/")
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5010)

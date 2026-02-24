@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 30px; }
+
+        /* Formulario */
+        form { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover { background-color: #45a049; }
+
+        /* Tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f9f9f9; }
+
+        /* Botón eliminar */
+        .btn-eliminar {
+            background-color: #e74c3c;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn-eliminar:hover { background-color: #c0392b; }
+
+        .sin-usuarios { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h1> Gestión de usuarios</h1>
+
+    <!-- Formulario para crear usuario -->
+    <h2>Agregar usuario</h2>
+    <form action="/crear" method="POST">
+        <label>ID:</label>
+        <input type="number" name="id" placeholder="Ej: 4" required>
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" placeholder="Ej: Ana" required>
+
+        <label>Edad:</label>
+        <input type="number" name="edad" placeholder="Ej: 25" required>
+
+        <button type="submit"> Crear Usuario</button>
+    </form>
+
+    <!-- Tabla de usuarios -->
+    <h2>Lista de usuarios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if usuarios %}
+                {% for u in usuarios %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.edad }}</td>
+                    <td>
+                        <a class="btn-eliminar" href="/eliminar/{{ u.id }}">🗑 Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="sin-usuarios">No hay usuarios registrados.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+</body>
+</html>
