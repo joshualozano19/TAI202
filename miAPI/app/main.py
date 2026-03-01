@@ -1,7 +1,13 @@
 #importaciones
 from fastapi import FastAPI, status, HTTPException
+from pydantic import BaseModel
 import asyncio
 from typing import Optional
+
+class agregar_usuario(BaseModel):
+    id: int
+    nombre: str
+    edad: int
 
 #Instancia del servidor
 app = FastAPI(
@@ -29,7 +35,7 @@ async def bienvenido():
             }
 
 @app.post("/v1/usuarios/", tags=['CRUD HTTP'] ,status_code=status.HTTP_201_CREATED)
-async def crear_usuario(usuario:crear_Usuario):  #<-------- Usamos el modelo
+async def crear_usuario(usuario:agregar_usuario):  #<-------- Usamos el modelo
     for usr in usuarios: 
         if usr ["id"] == usuario.id:
             raise HTTPException(
@@ -53,7 +59,7 @@ async def consultados(id: Optional[int] = None):
     if id is not None:
         for usuarioK in usuarios:
             if usuarioK["id"] == id:
-                return {"mensaje": "usuario encontrado", "usuario": usuarioK,}
+                return {"mensaje": "usuario encontrado", "usuario": usuarioK}
             return {"mensaje": "usuario no encontrado", "satus": "200"}
     else:
         return {"mensaje": "No se propcionó un id", "status": "200"}
@@ -77,7 +83,7 @@ async def agregar_usuario(usuario: dict):
                 detail="El id ya existe"
             )
         
-    usuariod.append(usuario)
+    usuarios.append(usuario)
     return{
         "mensaje": "Usuaruo creadie",
         "Datos nuevos"  : usuario

@@ -11,10 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 #Copiar el codigo del servidor
-COPY  ./app ./app
+COPY  . .
 
 #Exponer el puerto de trabajo
 EXPOSE 5000
 
 #Comando a ejecutar para levantar el servidor
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
